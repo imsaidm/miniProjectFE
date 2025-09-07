@@ -119,6 +119,11 @@ export default function EventDetailPage() {
         }
 
         // Check if seats are available
+        if (!event?.ticketTypes) {
+            alert("No ticket information available for this event!");
+            return;
+        }
+        
         const hasAvailableSeats = event.ticketTypes.some(ticketType => ticketType.availableSeats > 0);
         if (!hasAvailableSeats) {
             alert("Sorry, this event is sold out!");
@@ -442,7 +447,7 @@ export default function EventDetailPage() {
 
                                 {/* Ticket Types */}
                                 <div className="space-y-4 mb-6">
-                                    {event.ticketTypes.map((ticketType) => (
+                                    {event.ticketTypes?.map((ticketType) => (
                                         <div key={ticketType.id} className={`p-4 backdrop-blur-md rounded-2xl border transition-all duration-300 ${
                                             ticketType.availableSeats > 0 
                                                 ? "bg-white/5 border-white/10 hover:bg-white/10" 
@@ -474,10 +479,10 @@ export default function EventDetailPage() {
 
                                 {/* CTA Button */}
                                 {(() => {
-                                    const hasAvailableSeats = event.ticketTypes.some(ticketType => ticketType.availableSeats > 0);
+                                    const hasAvailableSeats = event.ticketTypes?.some(ticketType => ticketType.availableSeats > 0) || false;
                                     const userRole = getRoleFromToken();
                                     const userId = getUserIdFromToken();
-                                    const isOwnEvent = userRole === 'ORGANIZER' && userId && event?.organizer?.id === userId;
+                                    const isOwnEvent = userRole === 'ORGANIZER' && userId && event?.organizer?.id === userId || false;
                                     
                                     return (
                                         <button
