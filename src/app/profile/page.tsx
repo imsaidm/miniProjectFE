@@ -216,17 +216,17 @@ export default function ProfilePage() {
         </div>
 
         <div className="relative z-10 container-hero">
-          <div className="text-center mb-16">
-            <div className="hero-badge mb-8">
-              <span className="text-yellow-400 mr-3">👤</span>
-              <span className="text-white text-lg font-medium">User Profile</span>
+          <div className="text-center mb-12 sm:mb-16">
+            <div className="hero-badge mb-6 sm:mb-8">
+              <span className="text-yellow-400 mr-2 sm:mr-3 text-sm sm:text-base">👤</span>
+              <span className="text-white text-sm sm:text-lg font-medium">User Profile</span>
             </div>
             
-            <h1 className="hero-title text-5xl md:text-6xl mb-6">
+            <h1 className="hero-title text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-4 sm:mb-6">
               <span className="text-gradient">My Profile</span>
             </h1>
             
-            <p className="hero-subtitle text-xl md:text-2xl max-w-3xl mx-auto">
+            <p className="hero-subtitle text-lg sm:text-xl md:text-2xl max-w-3xl mx-auto px-4">
               Manage your account settings and personal information
             </p>
           </div>
@@ -236,31 +236,31 @@ export default function ProfilePage() {
       <div className="container-section">
         <div className="max-w-4xl mx-auto">
           {/* Profile Header */}
-          <div className="glass-card mb-12">
-            <div className="flex flex-col md:flex-row items-center space-y-6 md:space-y-0 md:space-x-8">
+          <div className="glass-card mb-8 sm:mb-12">
+            <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-6 lg:space-x-8">
               {/* Profile Image */}
               <div className="relative">
-                <div className="w-32 h-32 gradient-secondary rounded-full flex items-center justify-center shadow-lg">
+                <div className="w-24 h-24 sm:w-32 sm:h-32 gradient-secondary rounded-full flex items-center justify-center shadow-lg">
                   {previewUrl ? (
                     <img
                       src={previewUrl}
                       alt="Preview"
-                      className="w-32 h-32 rounded-full object-cover"
+                      className="w-24 h-24 sm:w-32 sm:h-32 rounded-full object-cover"
                     />
                   ) : profile.profileImg ? (
                     <img
                       src={profile.profileImg}
                       alt={profile.name}
-                      className="w-32 h-32 rounded-full object-cover"
+                      className="w-24 h-24 sm:w-32 sm:h-32 rounded-full object-cover"
                     />
                   ) : (
-                    <span className="text-6xl font-bold text-white">
+                    <span className="text-4xl sm:text-6xl font-bold text-white">
                       {profile.name.charAt(0).toUpperCase()}
                     </span>
                   )}
                 </div>
-                <div className="absolute -bottom-2 -right-2 w-8 h-8 gradient-primary rounded-full flex items-center justify-center">
-                  <span className="text-sm font-bold text-black">
+                <div className="absolute -bottom-1 -right-1 sm:-bottom-2 sm:-right-2 w-6 h-6 sm:w-8 sm:h-8 gradient-primary rounded-full flex items-center justify-center">
+                  <span className="text-xs sm:text-sm font-bold text-black">
                     {profile.role === 'ORGANIZER' ? '🎪' : '👤'}
                   </span>
                 </div>
@@ -268,21 +268,21 @@ export default function ProfilePage() {
 
               {/* Profile Info */}
               <div className="flex-1 text-center md:text-left">
-                <h2 className="text-3xl font-bold text-white mb-2">{profile.name}</h2>
-                <p className="text-gray-300 text-lg mb-4">{profile.email}</p>
-                <div className="flex flex-wrap gap-3 justify-center md:justify-start">
-                  <span className="badge-primary">
+                <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">{profile.name}</h2>
+                <p className="text-gray-300 text-base sm:text-lg mb-4 break-words">{profile.email}</p>
+                <div className="flex flex-wrap gap-2 sm:gap-3 justify-center md:justify-start">
+                  <span className="badge-primary text-xs sm:text-sm">
                     {profile.role === 'ORGANIZER' ? 'Event Organizer' : 'Customer'}
                   </span>
-                  <span className="badge-success">
+                  <span className="badge-success text-xs sm:text-sm">
                     {profile.pointsBalance} Points
                   </span>
                   {profile.role === 'ORGANIZER' && profile.organizerRating !== undefined && (
-                    <span className="badge-secondary">
+                    <span className="badge-secondary text-xs sm:text-sm">
                       ⭐ {profile.organizerRating.toFixed(1)} ({profile.organizerReviewCount} reviews)
                     </span>
                   )}
-                  <span className="badge-secondary">
+                  <span className="badge-secondary text-xs sm:text-sm">
                     Member since {new Date(profile.createdAt).toLocaleDateString()}
                   </span>
                 </div>
@@ -291,11 +291,11 @@ export default function ProfilePage() {
           </div>
 
           {/* Profile Sections */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
             {/* Edit Profile */}
             <div className="glass-card">
-              <h3 className="text-2xl font-bold text-white mb-6 flex items-center">
-                <span className="mr-3">✏️</span>
+              <h3 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6 flex items-center">
+                <span className="mr-2 sm:mr-3 text-lg sm:text-xl">✏️</span>
                 Edit Profile
               </h3>
               
@@ -407,8 +407,8 @@ export default function ProfilePage() {
 
             {/* Account Actions */}
             <div className="glass-card">
-              <h3 className="text-2xl font-bold text-white mb-6 flex items-center">
-                <span className="mr-3">⚙️</span>
+              <h3 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6 flex items-center">
+                <span className="mr-2 sm:mr-3 text-lg sm:text-xl">⚙️</span>
                 Account Actions
               </h3>
               
@@ -431,56 +431,56 @@ export default function ProfilePage() {
           </div>
 
           {/* Referral Information */}
-          <div className="glass-card mt-8">
-            <h3 className="text-2xl font-bold text-white mb-6 flex items-center">
-              <span className="mr-3">🎁</span>
+          <div className="glass-card mt-6 sm:mt-8">
+            <h3 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6 flex items-center">
+              <span className="mr-2 sm:mr-3 text-lg sm:text-xl">🎁</span>
               Referral Information
             </h3>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="p-6 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-2xl border border-purple-500/20">
-                <h4 className="text-lg font-semibold text-white mb-3">Your Referral Code</h4>
-                <div className="flex items-center space-x-3">
-                  <code className="flex-1 px-4 py-3 bg-white/10 backdrop-blur-md rounded-xl text-yellow-400 font-mono text-lg">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+              <div className="p-4 sm:p-6 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-2xl border border-purple-500/20">
+                <h4 className="text-base sm:text-lg font-semibold text-white mb-3">Your Referral Code</h4>
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-3 sm:space-y-0 sm:space-x-3">
+                  <code className="flex-1 px-3 py-2 sm:px-4 sm:py-3 bg-white/10 backdrop-blur-md rounded-xl text-yellow-400 font-mono text-sm sm:text-lg break-all">
                     {profile.referralCode}
                   </code>
                   <button
                     onClick={() => navigator.clipboard.writeText(profile.referralCode)}
-                    className="btn-primary px-4 py-3"
+                    className="btn-primary px-4 py-2 sm:py-3 text-sm sm:text-base"
                   >
                     Copy
                   </button>
                 </div>
-                <p className="text-gray-300 text-sm mt-3">
+                <p className="text-gray-300 text-xs sm:text-sm mt-3">
                   Share this code with friends to earn bonus points!
                 </p>
               </div>
 
               {profile.referrerInfo && (
-                <div className="p-6 bg-gradient-to-r from-green-500/10 to-emerald-500/10 rounded-2xl border border-green-500/20">
-                  <h4 className="text-lg font-semibold text-white mb-4">Referred By</h4>
+                <div className="p-4 sm:p-6 bg-gradient-to-r from-green-500/10 to-emerald-500/10 rounded-2xl border border-green-500/20">
+                  <h4 className="text-base sm:text-lg font-semibold text-white mb-3 sm:mb-4">Referred By</h4>
                   <div className="space-y-3">
                     <div className="flex items-center space-x-3">
-                      <div className="w-12 h-12 gradient-secondary rounded-full flex items-center justify-center overflow-hidden">
+                      <div className="w-10 h-10 sm:w-12 sm:h-12 gradient-secondary rounded-full flex items-center justify-center overflow-hidden flex-shrink-0">
                         {profile.referrerInfo.profileImg ? (
                           <img
                             src={profile.referrerInfo.profileImg}
                             alt={profile.referrerInfo.name}
-                            className="w-12 h-12 rounded-full object-cover"
+                            className="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover"
                           />
                         ) : (
-                          <span className="text-lg font-bold text-white">
+                          <span className="text-sm sm:text-lg font-bold text-white">
                             {profile.referrerInfo.name.charAt(0).toUpperCase()}
                           </span>
                         )}
                       </div>
-                      <div className="flex-1">
-                        <p className="text-white font-semibold text-lg">{profile.referrerInfo.name}</p>
-                        <p className="text-gray-300 text-sm">{profile.referrerInfo.email}</p>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-white font-semibold text-base sm:text-lg truncate">{profile.referrerInfo.name}</p>
+                        <p className="text-gray-300 text-xs sm:text-sm truncate">{profile.referrerInfo.email}</p>
                       </div>
                     </div>
                     <div className="pt-2">
-                      <span className="badge-secondary">
+                      <span className="badge-secondary text-xs sm:text-sm">
                         {profile.referrerInfo.role === 'ORGANIZER' ? 'Event Organizer' : 'Customer'}
                       </span>
                     </div>

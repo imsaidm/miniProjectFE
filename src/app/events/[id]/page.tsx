@@ -196,17 +196,17 @@ export default function EventDetailPage() {
                 </div>
 
                 <div className="relative z-10 container-hero">
-                    <div className="text-center mb-16">
-                        <div className="hero-badge mb-8">
-                            <span className="text-yellow-400 mr-3">🎪</span>
-                            <span className="text-white text-lg font-medium">Event Details</span>
+                    <div className="text-center mb-12 sm:mb-16">
+                        <div className="hero-badge mb-6 sm:mb-8">
+                            <span className="text-yellow-400 mr-2 sm:mr-3 text-sm sm:text-base">🎪</span>
+                            <span className="text-white text-sm sm:text-lg font-medium">Event Details</span>
                         </div>
                         
-                        <h1 className="hero-title text-5xl md:text-6xl mb-6">
+                        <h1 className="hero-title text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-4 sm:mb-6 px-2">
                             <span className="text-gradient">{event.title}</span>
                         </h1>
                         
-                        <p className="hero-subtitle text-xl md:text-2xl max-w-3xl mx-auto">
+                        <p className="hero-subtitle text-lg sm:text-xl md:text-2xl max-w-3xl mx-auto px-4">
                             Discover all the details about this amazing event
                         </p>
                     </div>
@@ -301,30 +301,30 @@ export default function EventDetailPage() {
                                     </div>
 
                                     {/* Organizer Information */}
-                                    <div className="p-6 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-2xl border border-purple-500/20">
-                                        <h3 className="text-xl font-bold text-white mb-4 flex items-center">
-                                            <span className="mr-3">🎪</span>
+                                    <div className="p-4 sm:p-6 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-2xl border border-purple-500/20">
+                                        <h3 className="text-lg sm:text-xl font-bold text-white mb-3 sm:mb-4 flex items-center">
+                                            <span className="mr-2 sm:mr-3 text-lg sm:text-xl">🎪</span>
                                             Event Organizer
                                         </h3>
-                                        <div className="flex items-center justify-between">
-                                            <div className="flex items-center space-x-4">
-                                                <div className="w-16 h-16 gradient-secondary rounded-full flex items-center justify-center">
-                                                    <span className="text-2xl font-bold text-white">🎪</span>
+                                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
+                                            <div className="flex items-center space-x-3 sm:space-x-4">
+                                                <div className="w-12 h-12 sm:w-16 sm:h-16 gradient-secondary rounded-full flex items-center justify-center flex-shrink-0">
+                                                    <span className="text-lg sm:text-2xl font-bold text-white">🎪</span>
                                                 </div>
-                                                <div>
-                                                    <p className="text-white font-semibold text-xl">{event.organizer.name}</p>
-                                                    <p className="text-gray-400">Professional Event Organizer</p>
+                                                <div className="min-w-0 flex-1">
+                                                    <p className="text-white font-semibold text-lg sm:text-xl truncate">{event.organizer.name}</p>
+                                                    <p className="text-gray-400 text-sm sm:text-base">Professional Event Organizer</p>
                                                 </div>
                                             </div>
-                                            <div className="text-right">
+                                            <div className="text-left sm:text-right">
                                                 <div className="flex items-center space-x-1 mb-2">
                                                     {[...Array(5)].map((_, i) => (
-                                                        <span key={i} className="text-2xl">
+                                                        <span key={i} className="text-lg sm:text-2xl">
                                                             {i < Math.floor(event.organizer.rating) ? '⭐' : '☆'}
                                                         </span>
                                                     ))}
                                                 </div>
-                                                <p className="text-yellow-400 font-bold text-lg">
+                                                <p className="text-yellow-400 font-bold text-base sm:text-lg">
                                                     {event.organizer.rating.toFixed(1)} ({event.organizer.reviewCount} reviews)
                                                 </p>
                                             </div>
@@ -335,32 +335,32 @@ export default function EventDetailPage() {
 
                             {/* Reviews Section */}
                             <div className="glass-card">
-                                <div className="flex items-center justify-between mb-6">
-                                    <h3 className="text-2xl font-bold text-white">Reviews</h3>
+                                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6 space-y-3 sm:space-y-0">
+                                    <h3 className="text-xl sm:text-2xl font-bold text-white">Reviews</h3>
                                     <div className="flex items-center space-x-2">
                                         <div className="flex items-center">
                                             {[...Array(5)].map((_, i) => (
-                                                <span key={i} className="text-2xl">
+                                                <span key={i} className="text-lg sm:text-2xl">
                                                     {i < Math.floor(averageRating) ? '⭐' : '☆'}
                                                 </span>
                                             ))}
                                         </div>
-                                        <span className="text-white font-semibold">
+                                        <span className="text-white font-semibold text-sm sm:text-base">
                                             {averageRating.toFixed(1)} ({reviews.length} reviews)
                                         </span>
                                     </div>
                                 </div>
 
                                 {/* Review Form */}
-                                <form onSubmit={handleReviewSubmit} className="mb-8 p-6 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10">
-                                    <h4 className="text-lg font-semibold text-white mb-4">Write a Review</h4>
-                                    <div className="space-y-4">
+                                <form onSubmit={handleReviewSubmit} className="mb-6 sm:mb-8 p-4 sm:p-6 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10">
+                                    <h4 className="text-base sm:text-lg font-semibold text-white mb-3 sm:mb-4">Write a Review</h4>
+                                    <div className="space-y-3 sm:space-y-4">
                                         <div>
-                                            <label className="form-label">Rating</label>
+                                            <label className="form-label text-sm sm:text-base">Rating</label>
                                             <select
                                                 value={newReview.rating}
                                                 onChange={(e) => setNewReview({ ...newReview, rating: parseInt(e.target.value) })}
-                                                className="form-select"
+                                                className="form-select text-sm sm:text-base"
                                             >
                                                 <option value={5}>⭐⭐⭐⭐⭐ Excellent (5)</option>
                                                 <option value={4}>⭐⭐⭐⭐ Very Good (4)</option>
@@ -370,24 +370,24 @@ export default function EventDetailPage() {
                                             </select>
                                         </div>
                                         <div>
-                                            <label className="form-label">Comment</label>
+                                            <label className="form-label text-sm sm:text-base">Comment</label>
                                             <textarea
                                                 value={newReview.comment}
                                                 onChange={(e) => setNewReview({ ...newReview, comment: e.target.value })}
-                                                className="form-textarea"
+                                                className="form-textarea text-sm sm:text-base"
                                                 placeholder="Share your experience..."
-                                                rows={4}
+                                                rows={3}
                                                 required
                                             />
                                         </div>
                                         <button
                                             type="submit"
                                             disabled={submittingReview}
-                                            className="btn-primary w-full py-3"
+                                            className="btn-primary w-full py-2 sm:py-3 text-sm sm:text-base"
                                         >
                                             {submittingReview ? (
                                                 <div className="flex items-center justify-center space-x-2">
-                                                    <div className="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin"></div>
+                                                    <div className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-black border-t-transparent rounded-full animate-spin"></div>
                                                     <span>Submitting...</span>
                                                 </div>
                                             ) : (
@@ -398,36 +398,36 @@ export default function EventDetailPage() {
                                 </form>
 
                                 {/* Reviews List */}
-                                <div className="space-y-6">
+                                <div className="space-y-4 sm:space-y-6">
                                     {reviews.length === 0 ? (
-                                        <div className="text-center py-12">
-                                            <div className="w-24 h-24 mx-auto mb-4 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-full flex items-center justify-center">
-                                                <span className="text-4xl">💬</span>
+                                        <div className="text-center py-8 sm:py-12">
+                                            <div className="w-20 h-20 sm:w-24 sm:h-24 mx-auto mb-3 sm:mb-4 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-full flex items-center justify-center">
+                                                <span className="text-3xl sm:text-4xl">💬</span>
                                             </div>
-                                            <h4 className="text-xl font-bold text-white mb-2">No Reviews Yet</h4>
-                                            <p className="text-gray-300">Be the first to share your experience!</p>
+                                            <h4 className="text-lg sm:text-xl font-bold text-white mb-2">No Reviews Yet</h4>
+                                            <p className="text-gray-300 text-sm sm:text-base">Be the first to share your experience!</p>
                                         </div>
                                     ) : (
                                         reviews.map((review) => (
-                                            <div key={review.id} className="p-6 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10">
-                                                <div className="flex items-start justify-between mb-4">
-                                                    <div>
-                                                        <h5 className="text-lg font-semibold text-white">
+                                            <div key={review.id} className="p-4 sm:p-6 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10">
+                                                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-3 sm:mb-4 space-y-2 sm:space-y-0">
+                                                    <div className="flex-1 min-w-0">
+                                                        <h5 className="text-base sm:text-lg font-semibold text-white truncate">
                                                             {review.user?.name || 'Anonymous User'}
                                                         </h5>
                                                         <div className="flex items-center mt-1">
                                                             {[...Array(5)].map((_, i) => (
-                                                                <span key={i} className="text-lg">
+                                                                <span key={i} className="text-sm sm:text-lg">
                                                                     {i < review.rating ? '⭐' : '☆'}
                                                                 </span>
                                                             ))}
                                                         </div>
                                                     </div>
-                                                    <span className="text-gray-400 text-sm">
+                                                    <span className="text-gray-400 text-xs sm:text-sm">
                                                         {new Date(review.createdAt).toLocaleDateString()}
                                                     </span>
                                                 </div>
-                                                <p className="text-gray-300 leading-relaxed">
+                                                <p className="text-gray-300 leading-relaxed text-sm sm:text-base">
                                                     {review.comment}
                                                 </p>
                                             </div>
@@ -440,32 +440,32 @@ export default function EventDetailPage() {
                         {/* Sidebar */}
                         <div className="lg:col-span-1">
                             <div className="glass-card sticky top-8">
-                                <h3 className="text-2xl font-bold text-white mb-6 flex items-center">
-                                    <span className="mr-3">🎫</span>
+                                <h3 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6 flex items-center">
+                                    <span className="mr-2 sm:mr-3 text-lg sm:text-xl">🎫</span>
                                     Get Tickets
                                 </h3>
 
                                 {/* Ticket Types */}
-                                <div className="space-y-4 mb-6">
+                                <div className="space-y-3 sm:space-y-4 mb-4 sm:mb-6">
                                     {event.ticketTypes?.map((ticketType) => (
-                                        <div key={ticketType.id} className={`p-4 backdrop-blur-md rounded-2xl border transition-all duration-300 ${
+                                        <div key={ticketType.id} className={`p-3 sm:p-4 backdrop-blur-md rounded-2xl border transition-all duration-300 ${
                                             ticketType.availableSeats > 0 
                                                 ? "bg-white/5 border-white/10 hover:bg-white/10" 
                                                 : "bg-red-500/10 border-red-500/20"
                                         }`}>
-                                            <div className="flex justify-between items-center mb-2">
-                                                <h4 className={`text-lg font-semibold ${
+                                            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-2 space-y-1 sm:space-y-0">
+                                                <h4 className={`text-base sm:text-lg font-semibold ${
                                                     ticketType.availableSeats > 0 ? "text-white" : "text-red-300"
                                                 }`}>
                                                     {ticketType.name}
                                                 </h4>
-                                                <span className={`font-bold text-xl ${
+                                                <span className={`font-bold text-lg sm:text-xl ${
                                                     ticketType.availableSeats > 0 ? "text-yellow-400" : "text-red-300"
                                                 }`}>
                                                     IDR {ticketType.priceIDR.toLocaleString('id-ID')}
                                                 </span>
                                             </div>
-                                            <p className={`text-sm mb-3 ${
+                                            <p className={`text-xs sm:text-sm ${
                                                 ticketType.availableSeats > 0 ? "text-gray-400" : "text-red-300"
                                             }`}>
                                                 {ticketType.availableSeats > 0 
@@ -488,7 +488,7 @@ export default function EventDetailPage() {
                                         <button
                                             onClick={handleBookNow}
                                             disabled={!hasAvailableSeats || isOwnEvent}
-                                            className={`w-full py-4 text-center text-lg font-bold rounded-2xl transition-all duration-300 ${
+                                            className={`w-full py-3 sm:py-4 text-center text-base sm:text-lg font-bold rounded-2xl transition-all duration-300 ${
                                                 hasAvailableSeats && !isOwnEvent
                                                     ? "btn-primary hover:scale-105"
                                                     : "bg-gray-500/20 text-gray-400 cursor-not-allowed border border-gray-500/30"
@@ -500,22 +500,22 @@ export default function EventDetailPage() {
                                 })()}
 
                                 {/* Event Stats */}
-                                <div className="mt-8 p-6 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-2xl border border-purple-500/20">
-                                    <h4 className="text-lg font-semibold text-white mb-4">Event Stats</h4>
-                                    <div className="space-y-3">
-                                        <div className="flex justify-between">
-                                            <span className="text-gray-300">Category:</span>
-                                            <span className="text-white font-medium">{event.category}</span>
+                                <div className="mt-6 sm:mt-8 p-4 sm:p-6 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-2xl border border-purple-500/20">
+                                    <h4 className="text-base sm:text-lg font-semibold text-white mb-3 sm:mb-4">Event Stats</h4>
+                                    <div className="space-y-2 sm:space-y-3">
+                                        <div className="flex justify-between items-center">
+                                            <span className="text-gray-300 text-sm sm:text-base">Category:</span>
+                                            <span className="text-white font-medium text-sm sm:text-base">{event.category}</span>
                                         </div>
-                                        <div className="flex justify-between">
-                                            <span className="text-gray-300">Base Price:</span>
-                                            <span className="text-yellow-400 font-bold">
+                                        <div className="flex justify-between items-center">
+                                            <span className="text-gray-300 text-sm sm:text-base">Base Price:</span>
+                                            <span className="text-yellow-400 font-bold text-sm sm:text-base">
                                                 IDR {event.basePriceIDR.toLocaleString('id-ID')}
                                             </span>
                                         </div>
-                                        <div className="flex justify-between">
-                                            <span className="text-gray-300">Rating:</span>
-                                            <span className="text-white font-medium">
+                                        <div className="flex justify-between items-center">
+                                            <span className="text-gray-300 text-sm sm:text-base">Rating:</span>
+                                            <span className="text-white font-medium text-sm sm:text-base">
                                                 {averageRating.toFixed(1)} ⭐ ({reviews.length} reviews)
                                             </span>
                                         </div>

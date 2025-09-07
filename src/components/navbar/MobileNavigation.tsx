@@ -1,5 +1,4 @@
 import Link from "next/link";
-import ClientOnly from "../ClientOnly";
 
 interface MobileNavigationProps {
   isMenuOpen: boolean;
@@ -44,66 +43,59 @@ export default function MobileNavigation({
               Events
             </Link>
             
-            <ClientOnly fallback={
+            {!isLoggedIn ? (
               <div className="space-y-2">
-                <div className="skeleton-vintage h-10 w-full"></div>
-                <div className="skeleton-vintage h-10 w-full"></div>
+                <Link 
+                  href="/auth/login" 
+                  className="block btn-vintage-outline text-center"
+                  onClick={onToggleMenu}
+                >
+                  Sign In
+                </Link>
+                <Link 
+                  href="/auth/register" 
+                  className="block btn-vintage text-center"
+                  onClick={onToggleMenu}
+                >
+                  Get Started
+                </Link>
               </div>
-            }>
-              {!isLoggedIn ? (
-                <div className="space-y-2">
+            ) : (
+              <div className="space-y-2">
+                {userRole === 'ORGANIZER' && (
                   <Link 
-                    href="/auth/login" 
-                    className="block btn-vintage-outline text-center"
+                    href="/dashboard" 
+                    className="block btn-vintage-secondary text-center text-sm"
                     onClick={onToggleMenu}
                   >
-                    Sign In
+                    Dashboard
                   </Link>
-                  <Link 
-                    href="/auth/register" 
-                    className="block btn-vintage text-center"
-                    onClick={onToggleMenu}
-                  >
-                    Get Started
-                  </Link>
-                </div>
-              ) : (
-                <div className="space-y-2">
-                  {userRole === 'ORGANIZER' && (
-                    <Link 
-                      href="/dashboard" 
-                      className="block btn-vintage-secondary text-center text-sm"
-                      onClick={onToggleMenu}
-                    >
-                      Dashboard
-                    </Link>
-                  )}
-                  <Link 
-                    href="/transactions" 
-                    className="block text-vintage-body hover:text-vintage-gold transition-colors duration-300 font-medium"
-                    onClick={onToggleMenu}
-                  >
-                    My Tickets
-                  </Link>
-                  <Link 
-                    href="/profile" 
-                    className="block text-vintage-body hover:text-vintage-gold transition-colors duration-300 font-medium"
-                    onClick={onToggleMenu}
-                  >
-                    Profile
-                  </Link>
-                  <button 
-                    onClick={() => {
-                      onLogout();
-                      onToggleMenu();
-                    }}
-                    className="w-full btn-vintage-outline text-sm hover:bg-red-600 hover:text-white hover:border-red-600 transition-all duration-300"
-                  >
-                    Sign Out
-                  </button>
-                </div>
-              )}
-            </ClientOnly>
+                )}
+                <Link 
+                  href="/transactions" 
+                  className="block text-vintage-body hover:text-vintage-gold transition-colors duration-300 font-medium"
+                  onClick={onToggleMenu}
+                >
+                  My Tickets
+                </Link>
+                <Link 
+                  href="/profile" 
+                  className="block text-vintage-body hover:text-vintage-gold transition-colors duration-300 font-medium"
+                  onClick={onToggleMenu}
+                >
+                  Profile
+                </Link>
+                <button 
+                  onClick={() => {
+                    onLogout();
+                    onToggleMenu();
+                  }}
+                  className="w-full btn-vintage-outline text-sm hover:bg-red-600 hover:text-white hover:border-red-600 transition-all duration-300"
+                >
+                  Sign Out
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { getRoleFromToken } from "@/lib/auth";
 import api from "@/lib/api";
+import { useHydration } from "@/hooks/useHydration";
 
 interface UserProfile {
   name: string;
@@ -15,14 +16,13 @@ interface UserProfile {
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userRole, setUserRole] = useState<string | null>(null);
+  const isHydrated = useHydration();
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const router = useRouter();
 
   useEffect(() => {
-    setIsMounted(true);
     const token = localStorage.getItem("token");
     if (!token) {
       setIsLoggedIn(false);
@@ -94,6 +94,58 @@ export default function Navbar() {
     router.push("/");
   };
 
+  // Render a minimal static navbar during SSR and initial load
+  if (!isHydrated) {
+    return (
+      <nav className="glass sticky top-0 z-50 border-b border-white/10" suppressHydrationWarning>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" suppressHydrationWarning>
+          <div className="flex justify-between items-center h-16" suppressHydrationWarning>
+            {/* Logo - Static */}
+            <Link href="/" className="flex items-center space-x-3 group" suppressHydrationWarning>
+              <div className="w-10 h-10 gradient-primary rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300" suppressHydrationWarning>
+                <span className="text-2xl font-bold text-black">🎪</span>
+              </div>
+              <span className="text-2xl font-bold gradient-text-primary">EventHub</span>
+            </Link>
+
+            {/* Desktop Navigation - Static */}
+            <div className="hidden md:flex items-center space-x-8" suppressHydrationWarning>
+              <Link href="/" className="nav-link" suppressHydrationWarning>Home</Link>
+              <Link href="/events" className="nav-link" suppressHydrationWarning>Events</Link>
+            </div>
+
+            {/* Auth Buttons - Static */}
+            <div className="hidden md:flex items-center space-x-4" suppressHydrationWarning>
+              <Link href="/auth/login" className="nav-link" suppressHydrationWarning>Sign In</Link>
+              <Link href="/auth/register" className="nav-button" suppressHydrationWarning>Get Started</Link>
+            </div>
+
+            {/* Mobile menu button - Static */}
+            <div className="md:hidden" suppressHydrationWarning>
+              <button className="glass-button p-2 rounded-xl" suppressHydrationWarning>
+                <svg
+                  className="w-6 h-6 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  suppressHydrationWarning
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 6h16M4 12h16M4 18h16"
+                    suppressHydrationWarning
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </nav>
+    );
+  }
+
   return (
     <nav className="glass sticky top-0 z-50 border-b border-white/10" suppressHydrationWarning>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" suppressHydrationWarning>
@@ -107,24 +159,24 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex items-center space-x-8" suppressHydrationWarning>
             <Link href="/" className="nav-link">
               Home
             </Link>
             <Link href="/events" className="nav-link">
               Events
             </Link>
-            {isMounted && isLoggedIn && userRole === "ORGANIZER" && (
+            {isLoggedIn && userRole === "ORGANIZER" && (
               <Link href="/dashboard" className="nav-link">
                 Dashboard
               </Link>
             )}
-            {isMounted && isLoggedIn && userRole === "CUSTOMER" && (
+            {isLoggedIn && userRole === "CUSTOMER" && (
               <Link href="/transactions" className="nav-link">
                 My Transactions
               </Link>
             )}
-            {isMounted && isLoggedIn && (
+            {isLoggedIn && (
               <Link href="/profile" className="nav-link">
                 Profile
               </Link>
@@ -132,8 +184,8 @@ export default function Navbar() {
           </div>
 
           {/* Auth Buttons */}
-          <div className="hidden md:flex items-center space-x-4">
-            {!isMounted || !isLoggedIn ? (
+          <div className="hidden md:flex items-center space-x-4" suppressHydrationWarning>
+            {!isLoggedIn ? (
               <>
                 <Link href="/auth/login" className="nav-link">
                   Sign In
@@ -173,7 +225,7 @@ export default function Navbar() {
           </div>
 
           {/* Mobile menu button */}
-          <div className="md:hidden">
+          <div className="md:hidden" suppressHydrationWarning>
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="glass-button p-2 rounded-xl"

@@ -7,6 +7,7 @@ import Navbar from "@/components/Navbar";
 import { CardSkeleton } from "@/components/Skeleton";
 import api from "@/lib/api";
 import { isLoggedIn, getRoleFromToken } from "@/lib/auth";
+import { useHydration } from "@/hooks/useHydration";
 
 interface Event {
   id: number;
@@ -34,6 +35,7 @@ function HomePageContent() {
   const [loading, setLoading] = useState(true);
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
   const [userRole, setUserRole] = useState<string | null>(null);
+  const isHydrated = useHydration();
 
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -108,10 +110,16 @@ function HomePageContent() {
   // Check authentication status
   useEffect(() => {
     const checkAuth = () => {
-      const loggedIn = isLoggedIn();
-      const role = getRoleFromToken();
-      setIsUserLoggedIn(loggedIn);
-      setUserRole(role);
+      try {
+        const loggedIn = isLoggedIn();
+        const role = getRoleFromToken();
+        setIsUserLoggedIn(loggedIn);
+        setUserRole(role);
+      } catch (error) {
+        console.warn('Auth check failed:', error);
+        setIsUserLoggedIn(false);
+        setUserRole(null);
+      }
     };
     
     checkAuth();
@@ -193,33 +201,32 @@ function HomePageContent() {
         </div>
 
         {/* Hero Content */}
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center" suppressHydrationWarning>
-          <div className="mb-8" suppressHydrationWarning>
-            <div className="inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-md rounded-full border border-white/20 mb-6" suppressHydrationWarning>
-              <span className="text-yellow-400 mr-2">✨</span>
-              <span className="text-white text-sm font-medium">Discover Amazing Events</span>
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24 text-center" suppressHydrationWarning>
+          <div className="mb-6 sm:mb-8" suppressHydrationWarning>
+            <div className="inline-flex items-center px-3 py-2 sm:px-4 sm:py-2 bg-white/10 backdrop-blur-md rounded-full border border-white/20 mb-4 sm:mb-6" suppressHydrationWarning>
+              <span className="text-yellow-400 mr-2 text-sm sm:text-base">✨</span>
+              <span className="text-white text-xs sm:text-sm font-medium">Discover Amazing Events</span>
             </div>
           </div>
           
-          <h1 className="text-6xl md:text-7xl font-bold text-white mb-8 leading-tight" suppressHydrationWarning>
-            <span className="bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-500 bg-clip-text text-transparent" suppressHydrationWarning>
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 sm:mb-8 leading-tight px-2" suppressHydrationWarning>
+            <span className="bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-500 bg-clip-text text-transparent block sm:inline" suppressHydrationWarning>
               Unforgettable
             </span>
-            <br />
-            <span className="text-white" suppressHydrationWarning>Experiences</span>
+            <span className="text-white block sm:inline sm:ml-2" suppressHydrationWarning>Experiences</span>
           </h1>
           
-          <p className="text-xl md:text-2xl text-gray-300 mb-12 max-w-4xl mx-auto leading-relaxed" suppressHydrationWarning>
+          <p className="text-lg sm:text-xl md:text-2xl text-gray-300 mb-8 sm:mb-12 max-w-4xl mx-auto leading-relaxed px-2" suppressHydrationWarning>
             From electrifying concerts to inspiring tech conferences, discover events that 
             <span className="text-yellow-400 font-semibold" suppressHydrationWarning> transform your world</span> and create 
             <span className="text-pink-400 font-semibold" suppressHydrationWarning> lasting memories</span>
           </p>
 
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16" suppressHydrationWarning>
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center mb-12 sm:mb-16 px-4" suppressHydrationWarning>
             <Link 
               href="#events"
-              className="group relative px-8 py-4 bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-bold rounded-2xl text-lg hover:from-yellow-300 hover:to-orange-400 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-yellow-500/25"
+              className="group relative w-full sm:w-auto px-6 py-3 sm:px-8 sm:py-4 bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-bold rounded-2xl text-base sm:text-lg hover:from-yellow-300 hover:to-orange-400 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-yellow-500/25"
             >
               <span className="relative z-10">Explore Events</span>
               <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-2xl blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
@@ -229,19 +236,19 @@ function HomePageContent() {
             {isUserLoggedIn && userRole === "ORGANIZER" ? (
               <Link 
                 href="/dashboard/create"
-                className="px-8 py-4 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-semibold rounded-2xl text-lg hover:from-green-400 hover:to-emerald-400 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-green-500/25"
+                className="w-full sm:w-auto px-6 py-3 sm:px-8 sm:py-4 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-semibold rounded-2xl text-base sm:text-lg hover:from-green-400 hover:to-emerald-400 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-green-500/25"
               >
                 🎪 Create Event
               </Link>
             ) : isUserLoggedIn && userRole === "CUSTOMER" ? (
-              <div className="relative group">
+              <div className="relative group w-full sm:w-auto">
                 <Link 
                   href="/auth/register?role=ORGANIZER"
-                  className="px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold rounded-2xl text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/25"
+                  className="w-full sm:w-auto px-6 py-3 sm:px-8 sm:py-4 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold rounded-2xl text-base sm:text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/25"
                 >
                   🚀 Register as Organizer
                 </Link>
-                <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-black/90 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none whitespace-nowrap">
+                <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-black/90 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none whitespace-nowrap hidden sm:block">
                   Create events and manage them
                   <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-black/90"></div>
                 </div>
@@ -249,7 +256,7 @@ function HomePageContent() {
             ) : (
               <Link 
                 href="/auth/register"
-                className="px-8 py-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold rounded-2xl text-lg hover:from-purple-400 hover:to-pink-400 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/25"
+                className="w-full sm:w-auto px-6 py-3 sm:px-8 sm:py-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold rounded-2xl text-base sm:text-lg hover:from-purple-400 hover:to-pink-400 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/25"
               >
                 🎪 Start Organizing
               </Link>
@@ -257,25 +264,25 @@ function HomePageContent() {
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 max-w-4xl mx-auto px-4">
             <div className="text-center">
-              <div className="text-4xl font-bold text-yellow-400 mb-2">500+</div>
-              <div className="text-gray-300">Amazing Events</div>
+              <div className="text-3xl sm:text-4xl font-bold text-yellow-400 mb-2">500+</div>
+              <div className="text-gray-300 text-sm sm:text-base">Amazing Events</div>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-bold text-pink-400 mb-2">50K+</div>
-              <div className="text-gray-300">Happy Attendees</div>
+              <div className="text-3xl sm:text-4xl font-bold text-pink-400 mb-2">50K+</div>
+              <div className="text-gray-300 text-sm sm:text-base">Happy Attendees</div>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-bold text-purple-400 mb-2">100+</div>
-              <div className="text-gray-300">Cities Covered</div>
+              <div className="text-3xl sm:text-4xl font-bold text-purple-400 mb-2">100+</div>
+              <div className="text-gray-300 text-sm sm:text-base">Cities Covered</div>
             </div>
           </div>
         </div>
       </div>
 
       {/* Promotional Banner - Eye-catching */}
-      <div className="relative py-16 bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500 overflow-hidden">
+      <div className="relative py-12 sm:py-16 bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500 overflow-hidden">
         <div className="absolute inset-0 bg-black/20"></div>
         <div className="absolute top-0 left-0 w-full h-full">
           <div className="absolute top-10 left-10 w-32 h-32 bg-white/10 rounded-full"></div>
@@ -283,23 +290,23 @@ function HomePageContent() {
         </div>
         
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="mb-6">
-            <span className="text-6xl">🎉</span>
+          <div className="mb-4 sm:mb-6">
+            <span className="text-4xl sm:text-6xl">🎉</span>
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-3 sm:mb-4 px-2">
             <span className="text-yellow-300">FLASH SALE!</span> Up to 70% OFF
           </h2>
-          <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
+          <p className="text-lg sm:text-xl text-white/90 mb-6 sm:mb-8 max-w-2xl mx-auto px-2">
             Limited time offer! Book your favorite events at incredible prices. 
             Don't miss out on these amazing deals!
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <div className="bg-white/20 backdrop-blur-md rounded-2xl px-6 py-3 border border-white/30">
-              <div className="text-2xl font-bold text-white">⏰ 24 HOURS LEFT</div>
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center px-4">
+            <div className="bg-white/20 backdrop-blur-md rounded-2xl px-4 py-2 sm:px-6 sm:py-3 border border-white/30">
+              <div className="text-lg sm:text-2xl font-bold text-white">⏰ 24 HOURS LEFT</div>
             </div>
             <Link 
               href="#events"
-              className="px-8 py-3 bg-white text-purple-600 font-bold rounded-2xl hover:bg-gray-100 transition-all duration-300 transform hover:scale-105"
+              className="w-full sm:w-auto px-6 py-3 sm:px-8 sm:py-3 bg-white text-purple-600 font-bold rounded-2xl hover:bg-gray-100 transition-all duration-300 transform hover:scale-105"
             >
               Claim Offer Now
             </Link>
@@ -308,18 +315,18 @@ function HomePageContent() {
       </div>
 
       {/* Role-based Information Section */}
-      <div className="py-16 bg-white/5 backdrop-blur-md">
+      <div className="py-12 sm:py-16 bg-white/5 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+          <div className="text-center mb-8 sm:mb-12">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-3 sm:mb-4 px-2">
               Choose Your Experience
             </h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+            <p className="text-lg sm:text-xl text-gray-300 max-w-3xl mx-auto px-2">
               Whether you want to attend amazing events or create them, we have the perfect solution for you
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
             {/* Customer Experience */}
             <div className="glass-card p-8 text-center hover:scale-105 transition-transform duration-300">
               <div className="text-5xl mb-4">🎫</div>
@@ -411,22 +418,22 @@ function HomePageContent() {
       </div>
 
       {/* Search and Filters Section */}
-      <div id="events" className="py-20 bg-white/5 backdrop-blur-md" suppressHydrationWarning>
+      <div id="events" className="py-12 sm:py-16 lg:py-20 bg-white/5 backdrop-blur-md" suppressHydrationWarning>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" suppressHydrationWarning>
-          <div className="text-center mb-16" suppressHydrationWarning>
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6" suppressHydrationWarning>
+          <div className="text-center mb-12 sm:mb-16" suppressHydrationWarning>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6 px-2" suppressHydrationWarning>
               Find Your Perfect Event
             </h2>
-            <p className="text-xl text-gray-300 max-w-2xl mx-auto" suppressHydrationWarning>
+            <p className="text-lg sm:text-xl text-gray-300 max-w-2xl mx-auto px-2" suppressHydrationWarning>
               Use our powerful search to discover events that match your interests, location, and schedule
             </p>
           </div>
 
           {/* Enhanced Search Bar */}
-          <div className="mb-12" suppressHydrationWarning>
-            <div className="relative max-w-3xl mx-auto" suppressHydrationWarning>
-              <div className="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none">
-                <svg className="h-8 w-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="mb-8 sm:mb-12" suppressHydrationWarning>
+            <div className="relative max-w-3xl mx-auto px-4" suppressHydrationWarning>
+              <div className="absolute inset-y-0 left-0 pl-4 sm:pl-6 flex items-center pointer-events-none">
+                <svg className="h-6 w-6 sm:h-8 sm:w-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
               </div>
@@ -435,21 +442,21 @@ function HomePageContent() {
                 placeholder="Search events by title, description, location, or category..."
                 value={searchTerm}
                 onChange={(e) => handleSearchChange(e.target.value)}
-                className="w-full pl-16 pr-6 py-5 text-xl border-0 bg-white/10 backdrop-blur-md text-white placeholder-gray-400 rounded-2xl focus:ring-4 focus:ring-yellow-400/50 focus:outline-none transition-all duration-300"
+                className="w-full pl-12 sm:pl-16 pr-4 sm:pr-6 py-3 sm:py-5 text-lg sm:text-xl border-0 bg-white/10 backdrop-blur-md text-white placeholder-gray-400 rounded-2xl focus:ring-4 focus:ring-yellow-400/50 focus:outline-none transition-all duration-300"
                 suppressHydrationWarning
               />
-              <div className="absolute inset-y-0 right-0 pr-6 flex items-center">
-                <div className="text-gray-400 text-sm">Press Enter to search</div>
+              <div className="absolute inset-y-0 right-0 pr-4 sm:pr-6 flex items-center">
+                <div className="text-gray-400 text-xs sm:text-sm hidden sm:block">Press Enter to search</div>
               </div>
             </div>
           </div>
 
           {/* Enhanced Filter Controls */}
-          <div className="flex flex-wrap gap-4 justify-center mb-12" suppressHydrationWarning>
+          <div className="flex flex-wrap gap-3 sm:gap-4 justify-center mb-8 sm:mb-12 px-4" suppressHydrationWarning>
             <select
               value={selectedCategory}
               onChange={(e) => handleCategoryChange(e.target.value)}
-              className="px-6 py-3 bg-white/10 backdrop-blur-md text-white border border-white/20 rounded-xl focus:ring-4 focus:ring-yellow-400/50 focus:outline-none transition-all duration-300"
+              className="w-full sm:w-auto px-4 py-3 sm:px-6 sm:py-3 bg-white/10 backdrop-blur-md text-white border border-white/20 rounded-xl focus:ring-4 focus:ring-yellow-400/50 focus:outline-none transition-all duration-300 text-sm sm:text-base"
               suppressHydrationWarning
             >
               <option value="" className="bg-gray-800 text-white">🎭 All Categories</option>
@@ -461,7 +468,7 @@ function HomePageContent() {
             <select
               value={selectedLocation}
               onChange={(e) => handleLocationChange(e.target.value)}
-              className="px-6 py-3 bg-white/10 backdrop-blur-md text-white border border-white/20 rounded-xl focus:ring-4 focus:ring-yellow-400/50 focus:outline-none transition-all duration-300"
+              className="w-full sm:w-auto px-4 py-3 sm:px-6 sm:py-3 bg-white/10 backdrop-blur-md text-white border border-white/20 rounded-xl focus:ring-4 focus:ring-yellow-400/50 focus:outline-none transition-all duration-300 text-sm sm:text-base"
               suppressHydrationWarning
             >
               <option value="" className="bg-gray-800 text-white">📍 All Locations</option>
@@ -483,7 +490,7 @@ function HomePageContent() {
                 }
                 router.push(`/?${params.toString()}`);
               }}
-              className="px-6 py-3 bg-white/10 backdrop-blur-md text-white border border-white/20 rounded-xl focus:ring-4 focus:ring-yellow-400/50 focus:outline-none transition-all duration-300"
+              className="w-full sm:w-auto px-4 py-3 sm:px-6 sm:py-3 bg-white/10 backdrop-blur-md text-white border border-white/20 rounded-xl focus:ring-4 focus:ring-yellow-400/50 focus:outline-none transition-all duration-300 text-sm sm:text-base"
               suppressHydrationWarning
             />
           </div>
@@ -504,7 +511,7 @@ function HomePageContent() {
       </div>
 
       {/* Events Grid Section */}
-      <div className="py-20" suppressHydrationWarning>
+      <div className="py-12 sm:py-16 lg:py-20" suppressHydrationWarning>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" suppressHydrationWarning>
           {filteredEvents.length === 0 ? (
             <div className="text-center py-20" suppressHydrationWarning>
@@ -523,7 +530,7 @@ function HomePageContent() {
               </button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" suppressHydrationWarning>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8" suppressHydrationWarning>
               {filteredEvents.map((event, index) => (
                 <div
                   key={event.id}
@@ -564,24 +571,24 @@ function HomePageContent() {
                   </div>
 
                   {/* Event Content */}
-                  <div className="p-8" suppressHydrationWarning>
-                    <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-yellow-400 transition-colors duration-300 line-clamp-2" suppressHydrationWarning>
+                  <div className="p-4 sm:p-6 lg:p-8" suppressHydrationWarning>
+                    <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-white mb-3 sm:mb-4 group-hover:text-yellow-400 transition-colors duration-300 line-clamp-2" suppressHydrationWarning>
                       {event.title}
                     </h3>
 
-                    <p className="text-gray-300 text-base mb-6 line-clamp-2 leading-relaxed" suppressHydrationWarning>
+                    <p className="text-gray-300 text-sm sm:text-base mb-4 sm:mb-6 line-clamp-2 leading-relaxed" suppressHydrationWarning>
                       {event.description}
                     </p>
 
                     {/* Event Details */}
-                    <div className="space-y-4 mb-6" suppressHydrationWarning>
+                    <div className="space-y-3 sm:space-y-4 mb-4 sm:mb-6" suppressHydrationWarning>
                       <div className="flex items-center text-gray-300" suppressHydrationWarning>
-                        <span className="mr-3 text-xl">📍</span>
-                        <span className="font-medium">{event.location}</span>
+                        <span className="mr-2 sm:mr-3 text-lg sm:text-xl">📍</span>
+                        <span className="font-medium text-sm sm:text-base truncate">{event.location}</span>
                       </div>
                       <div className="flex items-center text-gray-300" suppressHydrationWarning>
-                        <span className="mr-3 text-xl">📅</span>
-                        <span className="font-medium" suppressHydrationWarning>
+                        <span className="mr-2 sm:mr-3 text-lg sm:text-xl">📅</span>
+                        <span className="font-medium text-sm sm:text-base" suppressHydrationWarning>
                           {new Date(event.startAt).toLocaleDateString('en-US', {
                             weekday: 'short',
                             month: 'short',
@@ -591,8 +598,8 @@ function HomePageContent() {
                         </span>
                       </div>
                       <div className="flex items-center text-gray-300" suppressHydrationWarning>
-                        <span className="mr-3 text-xl">🎫</span>
-                        <span className={`font-medium ${
+                        <span className="mr-2 sm:mr-3 text-lg sm:text-xl">🎫</span>
+                        <span className={`font-medium text-sm sm:text-base ${
                           event.availableSeats > 0 ? "text-gray-300" : "text-red-400"
                         }`} suppressHydrationWarning>
                           {event.availableSeats > 0 
@@ -604,26 +611,26 @@ function HomePageContent() {
                     </div>
 
                     {/* Organizer Information */}
-                    <div className="mb-8 p-4 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-2xl border border-purple-500/20" suppressHydrationWarning>
-                      <div className="flex items-center justify-between" suppressHydrationWarning>
-                        <div className="flex items-center space-x-3" suppressHydrationWarning>
-                          <div className="w-10 h-10 gradient-secondary rounded-full flex items-center justify-center" suppressHydrationWarning>
-                            <span className="text-sm font-bold text-white">🎪</span>
+                    <div className="mb-6 sm:mb-8 p-3 sm:p-4 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-2xl border border-purple-500/20" suppressHydrationWarning>
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0" suppressHydrationWarning>
+                        <div className="flex items-center space-x-2 sm:space-x-3" suppressHydrationWarning>
+                          <div className="w-8 h-8 sm:w-10 sm:h-10 gradient-secondary rounded-full flex items-center justify-center flex-shrink-0" suppressHydrationWarning>
+                            <span className="text-xs sm:text-sm font-bold text-white">🎪</span>
                           </div>
-                          <div suppressHydrationWarning>
-                            <p className="text-white font-semibold" suppressHydrationWarning>{event.organizer.name}</p>
-                            <p className="text-gray-400 text-sm">Organizer</p>
+                          <div className="min-w-0 flex-1" suppressHydrationWarning>
+                            <p className="text-white font-semibold text-sm sm:text-base truncate" suppressHydrationWarning>{event.organizer.name}</p>
+                            <p className="text-gray-400 text-xs sm:text-sm">Organizer</p>
                           </div>
                         </div>
-                        <div className="text-right" suppressHydrationWarning>
-                          <div className="flex items-center space-x-1" suppressHydrationWarning>
+                        <div className="text-left sm:text-right" suppressHydrationWarning>
+                          <div className="flex items-center space-x-1 mb-1" suppressHydrationWarning>
                             {[...Array(5)].map((_, i) => (
-                              <span key={i} className="text-lg" suppressHydrationWarning>
+                              <span key={i} className="text-sm sm:text-lg" suppressHydrationWarning>
                                 {i < Math.floor(event.organizer.rating) ? '⭐' : '☆'}
                               </span>
                             ))}
                           </div>
-                          <p className="text-yellow-400 font-bold text-sm" suppressHydrationWarning>
+                          <p className="text-yellow-400 font-bold text-xs sm:text-sm" suppressHydrationWarning>
                             {event.organizer.rating.toFixed(1)} ({event.organizer.reviewCount} reviews)
                           </p>
                         </div>
@@ -633,7 +640,7 @@ function HomePageContent() {
                     {/* CTA Button */}
                     <Link
                       href={`/events/${event.id}`}
-                      className="block w-full bg-gradient-to-r from-yellow-400 to-orange-500 text-black text-center py-4 rounded-2xl font-bold text-lg hover:from-yellow-300 hover:to-orange-400 transition-all duration-300 transform group-hover:scale-105 shadow-lg"
+                      className="block w-full bg-gradient-to-r from-yellow-400 to-orange-500 text-black text-center py-3 sm:py-4 rounded-2xl font-bold text-base sm:text-lg hover:from-yellow-300 hover:to-orange-400 transition-all duration-300 transform group-hover:scale-105 shadow-lg"
                       suppressHydrationWarning
                     >
                       View Details
