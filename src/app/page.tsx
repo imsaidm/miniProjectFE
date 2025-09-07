@@ -610,32 +610,7 @@ function HomePageContent() {
                       </div>
                     </div>
 
-                    {/* Organizer Information */}
-                    <div className="mb-6 sm:mb-8 p-3 sm:p-4 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-2xl border border-purple-500/20" suppressHydrationWarning>
-                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0" suppressHydrationWarning>
-                        <div className="flex items-center space-x-2 sm:space-x-3" suppressHydrationWarning>
-                          <div className="w-8 h-8 sm:w-10 sm:h-10 gradient-secondary rounded-full flex items-center justify-center flex-shrink-0" suppressHydrationWarning>
-                            <span className="text-xs sm:text-sm font-bold text-white">🎪</span>
-                          </div>
-                          <div className="min-w-0 flex-1" suppressHydrationWarning>
-                            <p className="text-white font-semibold text-sm sm:text-base truncate" suppressHydrationWarning>{event.organizer.name}</p>
-                            <p className="text-gray-400 text-xs sm:text-sm">Organizer</p>
-                          </div>
-                        </div>
-                        <div className="text-left sm:text-right" suppressHydrationWarning>
-                          <div className="flex items-center space-x-1 mb-1" suppressHydrationWarning>
-                            {[...Array(5)].map((_, i) => (
-                              <span key={i} className="text-sm sm:text-lg" suppressHydrationWarning>
-                                {i < Math.floor(event.organizer.rating) ? '⭐' : '☆'}
-                              </span>
-                            ))}
-                          </div>
-                          <p className="text-yellow-400 font-bold text-xs sm:text-sm" suppressHydrationWarning>
-                            {event.organizer.rating.toFixed(1)} ({event.organizer.reviewCount} reviews)
-                          </p>
-                        </div>
-                      </div>
-                    </div>
+                    {/* Organizer details removed on homepage listing */}
 
                     {/* CTA Button */}
                     <Link

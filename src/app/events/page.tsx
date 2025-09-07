@@ -387,7 +387,7 @@ function EventsPageContent() {
             {sortedEvents.map((event, index) => (
               <div
                 key={event.id}
-                className="group relative glass-card hover:bg-white/10 transition-all duration-500 transform hover:-translate-y-2 hover:shadow-2xl hover:shadow-purple-500/25"
+                className="group relative glass-card overflow-hidden hover:bg-white/10 transition-all duration-500 transform hover:-translate-y-2 hover:shadow-2xl hover:shadow-purple-500/25"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
                 {/* Event Image */}
@@ -461,32 +461,7 @@ function EventsPageContent() {
                     </div>
                   </div>
 
-                  {/* Organizer Information */}
-                  <div className="mb-6 sm:mb-8 p-3 sm:p-4 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-2xl border border-purple-500/20">
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
-                      <div className="flex items-center space-x-2 sm:space-x-3">
-                        <div className="w-8 h-8 sm:w-10 sm:h-10 gradient-secondary rounded-full flex items-center justify-center flex-shrink-0">
-                          <span className="text-xs sm:text-sm font-bold text-white">🎪</span>
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <p className="text-white font-semibold text-sm sm:text-base truncate">{event.organizer.name}</p>
-                          <p className="text-gray-400 text-xs sm:text-sm">Organizer</p>
-                        </div>
-                      </div>
-                      <div className="text-left sm:text-right">
-                        <div className="flex items-center space-x-1 mb-1">
-                          {[...Array(5)].map((_, i) => (
-                            <span key={i} className="text-sm sm:text-lg">
-                              {i < Math.floor(event.organizer.rating) ? '⭐' : '☆'}
-                            </span>
-                          ))}
-                        </div>
-                        <p className="text-yellow-400 font-bold text-xs sm:text-sm">
-                          {event.organizer.rating.toFixed(1)} ({event.organizer.reviewCount} reviews)
-                        </p>
-                      </div>
-                    </div>
-                  </div>
+                  {/* Organizer details removed on events listing */}
 
                   {/* CTA Button */}
                   <Link
