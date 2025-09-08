@@ -52,6 +52,9 @@ export default function BookEventPage() {
     const [bookingItems, setBookingItems] = useState<BookingItem[]>([]);
     const [voucherCode, setVoucherCode] = useState("");
     const [couponCode, setCouponCode] = useState("");
+    const [voucherVerified, setVoucherVerified] = useState<null | { code: string; discountLabel: string }>(null);
+    const [couponVerified, setCouponVerified] = useState<null | { code: string; discountLabel: string }>(null);
+    const [verifying, setVerifying] = useState<{ voucher: boolean; coupon: boolean }>({ voucher: false, coupon: false });
     const [pointsUsed, setPointsUsed] = useState(0);
     const [submitting, setSubmitting] = useState(false);
 
@@ -124,8 +127,43 @@ export default function BookEventPage() {
 
     const calculateTotal = () => {
         const subtotal = calculateSubtotal();
-        // Note: In a real implementation, you'd calculate discounts here
+        // Client-side preview: show points only; discounts shown as labels after verification.
+        // The backend still authoritatively recalculates all discounts on submission.
         return Math.max(subtotal - pointsUsed, 0);
+    };
+
+    const verifyVoucher = async () => {
+        if (!voucherCode) return alert('Masukkan kode voucher');
+        setVerifying(v => ({ ...v, voucher: true }));
+        try {
+            const res = await api.post('/vouchers/validate', { code: voucherCode, eventId: Number(eventId) });
+            const label = res.data.discountType === 'AMOUNT'
+              ? `- IDR ${Number(res.data.discountValue).toLocaleString('id-ID')}`
+              : `- ${res.data.discountValue}% (dari subtotal)`;
+            setVoucherVerified({ code: voucherCode, discountLabel: label });
+        } catch (e: any) {
+            setVoucherVerified(null);
+            alert(e?.response?.data?.message || 'Voucher tidak valid');
+        } finally {
+            setVerifying(v => ({ ...v, voucher: false }));
+        }
+    };
+
+    const verifyCoupon = async () => {
+        if (!couponCode) return alert('Masukkan kode coupon');
+        setVerifying(v => ({ ...v, coupon: true }));
+        try {
+            const res = await api.post('/coupons/validate', { code: couponCode });
+            const label = res.data.discountType === 'AMOUNT'
+              ? `- IDR ${Number(res.data.discountValue).toLocaleString('id-ID')}`
+              : `- ${res.data.discountValue}% (dari subtotal)`;
+            setCouponVerified({ code: couponCode, discountLabel: label });
+        } catch (e: any) {
+            setCouponVerified(null);
+            alert(e?.response?.data?.message || 'Coupon tidak valid');
+        } finally {
+            setVerifying(v => ({ ...v, coupon: false }));
+        }
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -342,24 +380,40 @@ export default function BookEventPage() {
                                     <div className="space-y-4">
                                         <div>
                                             <label className="form-label">Voucher Code (Optional)</label>
-                                            <input
-                                                type="text"
-                                                value={voucherCode}
-                                                onChange={(e) => setVoucherCode(e.target.value)}
-                                                className="form-input"
-                                                placeholder="Enter voucher code"
-                                            />
+                                            <div className="flex gap-2">
+                                                <input
+                                                    type="text"
+                                                    value={voucherCode}
+                                                    onChange={(e) => { setVoucherCode(e.target.value); setVoucherVerified(null); }}
+                                                    className="form-input flex-1"
+                                                    placeholder="Masukkan kode voucher"
+                                                />
+                                                <button type="button" onClick={verifyVoucher} disabled={verifying.voucher} className="btn-secondary whitespace-nowrap">
+                                                    {verifying.voucher ? 'Memeriksa...' : 'Verifikasi'}
+                                                </button>
+                                            </div>
+                                            {voucherVerified && (
+                                                <div className="text-green-400 text-sm mt-1">Voucher terverifikasi {voucherVerified.discountLabel}</div>
+                                            )}
                                         </div>
                                         
                                         <div>
                                             <label className="form-label">Coupon Code (Optional)</label>
-                                            <input
-                                                type="text"
-                                                value={couponCode}
-                                                onChange={(e) => setCouponCode(e.target.value)}
-                                                className="form-input"
-                                                placeholder="Enter coupon code"
-                                            />
+                                            <div className="flex gap-2">
+                                                <input
+                                                    type="text"
+                                                    value={couponCode}
+                                                    onChange={(e) => { setCouponCode(e.target.value); setCouponVerified(null); }}
+                                                    className="form-input flex-1"
+                                                    placeholder="Masukkan kode coupon"
+                                                />
+                                                <button type="button" onClick={verifyCoupon} disabled={verifying.coupon} className="btn-secondary whitespace-nowrap">
+                                                    {verifying.coupon ? 'Memeriksa...' : 'Verifikasi'}
+                                                </button>
+                                            </div>
+                                            {couponVerified && (
+                                                <div className="text-green-400 text-sm mt-1">Coupon terverifikasi {couponVerified.discountLabel}</div>
+                                            )}
                                         </div>
                                         
                                         <div>
@@ -384,6 +438,18 @@ export default function BookEventPage() {
                                                 <span>Subtotal:</span>
                                                 <span>IDR {subtotal.toLocaleString('id-ID')}</span>
                                             </div>
+                                            {voucherVerified && (
+                                                <div className="flex justify-between text-green-400">
+                                                    <span>Voucher ({voucherVerified.code}):</span>
+                                                    <span>{voucherVerified.discountLabel}</span>
+                                                </div>
+                                            )}
+                                            {couponVerified && (
+                                                <div className="flex justify-between text-green-400">
+                                                    <span>Coupon ({couponVerified.code}):</span>
+                                                    <span>{couponVerified.discountLabel}</span>
+                                                </div>
+                                            )}
                                             {pointsUsed > 0 && (
                                                 <div className="flex justify-between text-gray-300">
                                                     <span>Points Used:</span>
