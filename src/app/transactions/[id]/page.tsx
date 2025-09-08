@@ -426,17 +426,17 @@ export default function TransactionDetailPage() {
                     </div>
                 </div>
             </div>
-        </div>
         {/* Cancel Confirmation Dialog */}
         <ConfirmDialog
-            isOpen={showCancelDialog}
-            onClose={() => setShowCancelDialog(false)}
-            onConfirm={handleCancel}
-            title="Cancel Transaction"
-            message="Are you sure you want to cancel this transaction? Reserved seats and any applied coupon/points will be restored."
-            confirmText={processing ? "Cancelling..." : "Yes, Cancel"}
-            cancelText="Keep Transaction"
-            type="danger"
+          isOpen={showCancelDialog}
+          onClose={() => setShowCancelDialog(false)}
+          onConfirm={handleCancel}
+          title="Cancel Transaction"
+          message="Are you sure you want to cancel this transaction? Reserved seats and any applied coupon/points will be restored."
+          confirmText={processing ? "Cancelling..." : "Yes, Cancel"}
+          cancelText="Keep Transaction"
+          type="danger"
         />
-    );
+      </div>
+  );
 }
