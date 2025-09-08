@@ -35,6 +35,7 @@ export default function VouchersPage() {
 
   const [form, setForm] = useState({
     eventId: '' as number | '' ,
+    code: '',
     discountType: 'AMOUNT' as DiscountType,
     discountValue: 0,
     startsAt: '',
@@ -71,17 +72,18 @@ export default function VouchersPage() {
   const onCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.eventId) return alert('Select event');
+    if (!form.code || !form.code.trim()) return alert('Enter voucher code');
     try {
       await api.post('/vouchers', {
         eventId: Number(form.eventId),
-        code: undefined, // generated backend or can be omitted if backend handles
+        code: form.code.trim(),
         discountType: form.discountType,
         discountValue: Number(form.discountValue),
         startsAt: form.startsAt,
         endsAt: form.endsAt,
         maxUses: form.maxUses === '' ? null : Number(form.maxUses),
       });
-      setForm({ eventId: '', discountType: 'AMOUNT', discountValue: 0, startsAt: '', endsAt: '', maxUses: '' });
+      setForm({ eventId: '', code: '', discountType: 'AMOUNT', discountValue: 0, startsAt: '', endsAt: '', maxUses: '' });
       await reload();
     } catch (err: any) {
       alert(err?.response?.data?.message || 'Failed to create voucher');
@@ -184,6 +186,21 @@ export default function VouchersPage() {
               
               <form onSubmit={onCreate} className="space-y-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <div className="form-group">
+                    <label className="form-label text-sm font-semibold mb-3 block flex items-center">
+                      <span className="mr-2">🔑</span>
+                      Voucher Code
+                    </label>
+                    <input
+                      type="text"
+                      value={form.code}
+                      onChange={(e) => setForm({ ...form, code: e.target.value.toUpperCase() })}
+                      className="w-full px-4 py-4 bg-white/10 backdrop-blur-md text-white border border-white/20 rounded-2xl focus:ring-4 focus:ring-yellow-400/50 focus:outline-none transition-all duration-300 hover:bg-white/15 font-mono tracking-wider"
+                      placeholder="e.g., EARLYBIRD50"
+                      required
+                    />
+                    <p className="text-xs text-gray-400 mt-2">Codes are case-insensitive; we recommend uppercase.</p>
+                  </div>
                   <div className="form-group">
                     <label className="form-label text-sm font-semibold mb-3 block flex items-center">
                       <span className="mr-2">🎪</span>
