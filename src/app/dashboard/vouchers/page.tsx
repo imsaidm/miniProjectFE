@@ -79,8 +79,9 @@ export default function VouchersPage() {
         code: form.code.trim(),
         discountType: form.discountType,
         discountValue: Number(form.discountValue),
-        startsAt: form.startsAt,
-        endsAt: form.endsAt,
+        // Send ISO to avoid timezone ambiguity
+        startsAt: form.startsAt ? new Date(form.startsAt).toISOString() : '',
+        endsAt: form.endsAt ? new Date(form.endsAt).toISOString() : '',
         maxUses: form.maxUses === '' ? null : Number(form.maxUses),
       });
       setForm({ eventId: '', code: '', discountType: 'AMOUNT', discountValue: 0, startsAt: '', endsAt: '', maxUses: '' });
