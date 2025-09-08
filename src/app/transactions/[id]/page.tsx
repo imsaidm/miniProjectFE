@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import { Skeleton } from "@/components/Skeleton";
+import ConfirmDialog from "@/components/ConfirmDialog";
 import api from "@/lib/api";
 import { isLoggedIn, getRoleFromToken } from "@/lib/auth";
 
@@ -52,6 +53,8 @@ export default function TransactionDetailPage() {
     const [transaction, setTransaction] = useState<Transaction | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [showCancelDialog, setShowCancelDialog] = useState(false);
+    const [processing, setProcessing] = useState(false);
 
     useEffect(() => {
         if (!isLoggedIn()) {
@@ -80,6 +83,22 @@ export default function TransactionDetailPage() {
 
         fetchTransaction();
     }, [transactionId, router]);
+
+    const handleCancel = async () => {
+        if (!transaction) return;
+        setProcessing(true);
+        try {
+            await api.patch(`/transactions/${transaction.id}/cancel`);
+            setShowCancelDialog(false);
+            // Refresh details to reflect canceled status
+            const res = await api.get(`/transactions/${transaction.id}`);
+            setTransaction(res.data);
+        } catch (e: any) {
+            alert(e?.response?.data?.message || 'Failed to cancel transaction');
+        } finally {
+            setProcessing(false);
+        }
+    };
 
     const getStatusColor = (status: string) => {
         switch (status) {
@@ -379,6 +398,14 @@ export default function TransactionDetailPage() {
                                             Upload Payment Proof
                                         </button>
                                     )}
+                                    {transaction.status === "WAITING_PAYMENT" && (
+                                        <button
+                                            onClick={() => setShowCancelDialog(true)}
+                                            className="w-full py-3 bg-red-500/10 backdrop-blur-md border border-red-500/20 text-red-300 font-semibold rounded-2xl hover:bg-red-500/20 transition-all duration-300"
+                                        >
+                                            Cancel Transaction
+                                        </button>
+                                    )}
                                     
                                     <button
                                         onClick={() => router.push(`/events/${transaction.event.id}`)}
@@ -400,5 +427,16 @@ export default function TransactionDetailPage() {
                 </div>
             </div>
         </div>
+        {/* Cancel Confirmation Dialog */}
+        <ConfirmDialog
+            isOpen={showCancelDialog}
+            onClose={() => setShowCancelDialog(false)}
+            onConfirm={handleCancel}
+            title="Cancel Transaction"
+            message="Are you sure you want to cancel this transaction? Reserved seats and any applied coupon/points will be restored."
+            confirmText={processing ? "Cancelling..." : "Yes, Cancel"}
+            cancelText="Keep Transaction"
+            type="danger"
+        />
     );
 }
