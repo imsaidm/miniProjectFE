@@ -6,7 +6,6 @@ const backendOrigin = process.env.BACKEND_ORIGIN || "http://localhost:4400";
 const nextConfig: NextConfig = {
   // Performance optimizations
   experimental: {
-    optimizeCss: true,
     optimizePackageImports: ['@/components', '@/lib', '@/hooks'],
   },
   
