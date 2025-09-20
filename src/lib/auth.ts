@@ -193,7 +193,7 @@ export function isTokenExpiringSoon(minutes: number = 5): boolean {
 // Refresh token if needed (placeholder for future implementation)
 export async function refreshTokenIfNeeded(): Promise<boolean> {
   if (isTokenExpiringSoon(10)) {
-    // TODO: Implement token refresh logic
+    // Token refresh logic can be implemented here when needed
     console.log('Token refresh needed');
     return false;
   }
