@@ -211,7 +211,7 @@ function HomePageContent() {
           
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 sm:mb-8 leading-tight px-2" suppressHydrationWarning>
             <span className="bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-500 bg-clip-text text-transparent block sm:inline" suppressHydrationWarning>
-              Forgettable
+              Unforgettable
             </span>
             <span className="text-white block sm:inline sm:ml-2" suppressHydrationWarning>Experiences</span>
           </h1>
